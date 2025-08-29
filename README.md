@@ -37,3 +37,12 @@ This project connects **Slack** and **Jenkins** so that developers can trigger b
 In Slack `#ci-alerts` channel, type:
 # slackup-jenkins
 Slack + Jenkins CI/CD integration project
+---
+
+## 📂 Repo Structure
+slackup-jenkins/
+├── Jenkinsfile
+├── README.md
+└── docs/
+    └── screenshots/   (to be added later)
+
