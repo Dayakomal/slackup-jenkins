@@ -1,0 +1,63 @@
+pipeline {
+  agent any
+  options { disableConcurrentBuilds() }
+
+  environment {
+    // Slack slash command se aaya text (dev/qa/prod) → ENV_INFERRED
+    ENV_INFERRED = "${SLASH_TEXT_0 ?: params.ENV}"
+  }
+
+  parameters {
+    string(name: 'ENV', defaultValue: 'dev', description: 'Environment (dev|qa|prod)')
+  }
+
+  stages {
+    stage('Announce Start') {
+      steps {
+        slackSend(
+          channel: 'C09CJ1S0KUM',                    // <- tumhara #ci-alerts channel ID
+          message: "🚀 ${env.JOB_NAME} #${env.BUILD_NUMBER} started (ENV=${env.ENV_INFERRED})",
+          tokenCredentialId: 'slack-bot-token',
+          botUser: true
+        )
+      }
+    }
+    stage('Build') {
+      steps {
+        echo "Building for ${env.ENV_INFERRED}"
+      }
+    }
+    stage('Deploy') {
+      steps {
+        echo "Deploying to ${env.ENV_INFERRED}"
+      }
+    }
+  }
+
+  post {
+    success {
+      slackSend(
+        channel: 'C09CJ1S0KUM',
+        message: "✅ Success: ${env.JOB_NAME} #${env.BUILD_NUMBER} (ENV=${env.ENV_INFERRED})",
+        tokenCredentialId: 'slack-bot-token',
+        botUser: true
+      )
+    }
+    failure {
+      slackSend(
+        channel: 'C09CJ1S0KUM',
+        message: "❌ Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER} (ENV=${env.ENV_INFERRED})",
+        tokenCredentialId: 'slack-bot-token',
+        botUser: true
+      )
+    }
+    always {
+      slackSend(
+        channel: 'C09CJ1S0KUM',
+        message: "📎 Console: ${env.BUILD_URL}console",
+        tokenCredentialId: 'slack-bot-token',
+        botUser: true
+      )
+    }
+  }
+}
