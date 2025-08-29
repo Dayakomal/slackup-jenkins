@@ -45,4 +45,16 @@ slackup-jenkins/
 ├── README.md
 └── docs/
     └── screenshots/   (to be added later)
+---
+
+## ❗ Troubleshooting
+- `not_in_channel` → Invite the bot again: `/invite @jenkins-ci`
+- `channel_not_found` → Use the **channel ID** (C…) instead of the name
+- `invalid_auth` → Rotate Slack Bot token (xoxb…) and update the Jenkins Secret Text credential
+- ngrok URL changes on every restart → update the Slash Command **Request URL** with the new ngrok host
+
+---
+
+## 🙌 Author
+Dayakomal – DevOps Learner & Cloud Enthusiast
 
